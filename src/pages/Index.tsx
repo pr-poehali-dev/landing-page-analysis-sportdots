@@ -180,6 +180,48 @@ export default function Index() {
         </div>
       </section>
 
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="text-base px-4 py-2 mb-4">Видеообзор</Badge>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4">Посмотрите, как работает наколенник</h3>
+              <p className="text-lg text-gray-600">Реальные отзывы покупателей и демонстрация использования</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 relative group cursor-pointer">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                      <Icon name="Play" className="text-primary ml-1" size={32} />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                    <p className="text-white font-semibold">Как правильно надевать наколенник</p>
+                    <p className="text-white/80 text-sm">2:15</p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div className="aspect-video bg-gradient-to-br from-blue-100 to-orange-100 relative group cursor-pointer">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                      <Icon name="Play" className="text-primary ml-1" size={32} />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                    <p className="text-white font-semibold">Отзыв Марии Ивановны, 67 лет</p>
+                    <p className="text-white/80 text-sm">3:42</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <h3 className="text-3xl md:text-4xl font-bold text-center mb-12">Почему выбирают КоленоКомфорт</h3>
@@ -198,6 +240,169 @@ export default function Index() {
                 <p className="text-gray-600 text-sm leading-relaxed">{benefit.description}</p>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gradient-to-br from-blue-50 via-white to-orange-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="text-base px-4 py-2 mb-4">Научная разработка</Badge>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4">Технология точечной компрессии</h3>
+              <p className="text-lg text-gray-600">Разработано российскими врачами-ортопедами специально для пожилых людей</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <Card className="p-6 text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Target" className="text-primary" size={32} />
+                </div>
+                <h4 className="text-xl font-bold mb-3">Точечное воздействие</h4>
+                <p className="text-gray-600">Специальные силиконовые вставки оказывают массажный эффект на акупунктурные точки вокруг колена</p>
+              </Card>
+              
+              <Card className="p-6 text-center">
+                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Activity" className="text-secondary" size={32} />
+                </div>
+                <h4 className="text-xl font-bold mb-3">Улучшение кровотока</h4>
+                <p className="text-gray-600">Компрессия активизирует микроциркуляцию крови и лимфы, что ускоряет восстановление тканей</p>
+              </Card>
+              
+              <Card className="p-6 text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Icon name="Shield" className="text-green-600" size={32} />
+                </div>
+                <h4 className="text-xl font-bold mb-3">Стабилизация сустава</h4>
+                <p className="text-gray-600">Анатомический крой и эластичные боковые вставки фиксируют колено в правильном положении</p>
+              </Card>
+            </div>
+
+            <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 p-8">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h4 className="text-2xl font-bold mb-4">Клинически доказанная эффективность</h4>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span className="text-2xl font-bold text-primary">78%</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Снижение боли</p>
+                        <p className="text-sm text-gray-600">У пациентов с артрозом после 2 недель использования</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span className="text-2xl font-bold text-primary">65%</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Улучшение подвижности</p>
+                        <p className="text-sm text-gray-600">Увеличение амплитуды движения в суставе</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span className="text-2xl font-bold text-primary">92%</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Удовлетворённость</p>
+                        <p className="text-sm text-gray-600">Покупателей рекомендуют наколенник знакомым</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 shadow-lg">
+                  <div className="flex items-start gap-3 mb-4">
+                    <Icon name="Award" className="text-primary flex-shrink-0" size={32} />
+                    <div>
+                      <h5 className="font-bold text-lg mb-2">Рекомендовано ведущими ортопедами России</h5>
+                      <p className="text-sm text-gray-600">Одобрено Национальной ассоциацией ортопедов для использования при артрозе, артрите и реабилитации после травм</p>
+                    </div>
+                  </div>
+                  <Separator className="my-4" />
+                  <div className="flex items-start gap-3">
+                    <Icon name="FileCheck" className="text-green-600 flex-shrink-0" size={32} />
+                    <div>
+                      <h5 className="font-bold text-lg mb-2">Сертификация Минздрава РФ</h5>
+                      <p className="text-sm text-gray-600">Зарегистрировано как медицинское изделие класса 1. Регистрационное удостоверение № РЗН 2023/18956</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl md:text-4xl font-bold mb-4">При каких проблемах помогает наколенник</h3>
+              <p className="text-lg text-gray-600">Эффективен при различных заболеваниях суставов</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Icon name="AlertCircle" className="text-red-600" size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-2">Артроз коленного сустава</h4>
+                    <p className="text-gray-600">Снижает болевой синдром, замедляет разрушение хряща, улучшает питание тканей</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Icon name="Flame" className="text-orange-600" size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-2">Артрит и воспаления</h4>
+                    <p className="text-gray-600">Уменьшает отёк, согревает сустав, облегчает утреннюю скованность</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Icon name="Sparkles" className="text-blue-600" size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-2">Реабилитация после травм</h4>
+                    <p className="text-gray-600">Поддерживает сустав в период восстановления после операций и повреждений</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Icon name="TrendingDown" className="text-purple-600" size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-2">Профилактика износа</h4>
+                    <p className="text-gray-600">Предотвращает преждевременное старение суставов при повышенных нагрузках</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            <Card className="mt-8 bg-yellow-50 border-yellow-200 p-6">
+              <div className="flex gap-4">
+                <Icon name="Info" className="text-yellow-600 flex-shrink-0" size={24} />
+                <div>
+                  <h4 className="font-bold text-lg mb-2">Важно знать</h4>
+                  <p className="text-gray-700">Наколенник не заменяет лечение, назначенное врачом. Это вспомогательное средство, которое усиливает эффект основной терапии. При острых болях обязательно проконсультируйтесь с ортопедом.</p>
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
       </section>
