@@ -3,423 +3,495 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { useToast } from '@/hooks/use-toast';
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-  rating: number;
-}
-
-interface CartItem extends Product {
-  quantity: number;
-  size?: string;
-}
-
-const products: Product[] = [
-  {
-    id: 1,
-    name: 'Наколенник спортивный Pro',
-    price: 2490,
-    image: 'https://cdn.poehali.dev/projects/47749b69-c90d-4d20-b017-39c98a492235/files/ff462507-4eb0-43e4-aabe-9e838243afdf.jpg',
-    category: 'Наколенники',
-    rating: 4.8
-  },
-  {
-    id: 2,
-    name: 'Налокотник компрессионный',
-    price: 1890,
-    image: 'https://cdn.poehali.dev/projects/47749b69-c90d-4d20-b017-39c98a492235/files/45f89934-c972-4211-82a6-eef10571f2c6.jpg',
-    category: 'Налокотники',
-    rating: 4.7
-  },
-  {
-    id: 3,
-    name: 'Бандаж для запястья',
-    price: 1490,
-    image: 'https://cdn.poehali.dev/projects/47749b69-c90d-4d20-b017-39c98a492235/files/aa460868-646a-4fc3-98aa-e8805096e1f2.jpg',
-    category: 'Бандажи',
-    rating: 4.9
-  }
-];
-
 export default function Index() {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>('M');
+  const [orderForm, setOrderForm] = useState({
+    name: '',
+    phone: '',
+    address: ''
+  });
+  const [showOrderForm, setShowOrderForm] = useState(false);
   const { toast } = useToast();
 
-  const addToCart = (product: Product, size: string) => {
-    const existingItem = cart.find(item => item.id === product.id && item.size === size);
-    
-    if (existingItem) {
-      setCart(cart.map(item => 
-        item.id === product.id && item.size === size
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      ));
-    } else {
-      setCart([...cart, { ...product, quantity: 1, size }]);
+  const handleOrder = () => {
+    if (!orderForm.name || !orderForm.phone || !orderForm.address) {
+      toast({
+        title: "Заполните все поля",
+        description: "Укажите имя, телефон и адрес доставки",
+        variant: "destructive"
+      });
+      return;
     }
 
     toast({
-      title: "Товар добавлен в корзину",
-      description: `${product.name} (${size})`,
+      title: "Заказ оформлен!",
+      description: "Мы свяжемся с вами в ближайшее время",
     });
+
+    setShowOrderForm(false);
+    setOrderForm({ name: '', phone: '', address: '' });
   };
 
-  const removeFromCart = (productId: number, size?: string) => {
-    setCart(cart.filter(item => !(item.id === productId && item.size === size)));
-  };
-
-  const updateQuantity = (productId: number, size: string | undefined, newQuantity: number) => {
-    if (newQuantity === 0) {
-      removeFromCart(productId, size);
-    } else {
-      setCart(cart.map(item => 
-        item.id === productId && item.size === size
-          ? { ...item, quantity: newQuantity }
-          : item
-      ));
+  const benefits = [
+    {
+      icon: 'Heart',
+      title: 'Облегчает боль',
+      description: 'Снижает нагрузку на сустав и уменьшает дискомфорт при движении'
+    },
+    {
+      icon: 'Zap',
+      title: 'Улучшает кровообращение',
+      description: 'Компрессионная технология активизирует кровоток в области колена'
+    },
+    {
+      icon: 'Shield',
+      title: 'Надёжная поддержка',
+      description: 'Стабилизирует коленный сустав, предотвращает травмы'
+    },
+    {
+      icon: 'Smile',
+      title: 'Легко надевать',
+      description: 'Удобная конструкция с простой фиксацией без посторонней помощи'
     }
-  };
+  ];
 
-  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const testimonials = [
+    {
+      name: 'Мария Ивановна, 67 лет',
+      text: 'После операции на колене врач рекомендовал этот наколенник. Уже через неделю боль значительно уменьшилась!',
+      rating: 5
+    },
+    {
+      name: 'Владимир Петрович, 72 года',
+      text: 'Отличная вещь! Ношу каждый день на прогулках. Колено больше не беспокоит, могу снова гулять с внуками.',
+      rating: 5
+    },
+    {
+      name: 'Галина Сергеевна, 65 лет',
+      text: 'Очень довольна покупкой. Материал мягкий, не натирает. Легко надевать и снимать самостоятельно.',
+      rating: 5
+    }
+  ];
+
+  const faqs = [
+    {
+      question: 'Как долго можно носить наколенник?',
+      answer: 'Рекомендуется носить 4-6 часов в день во время активности. Можно использовать постоянно при хронических проблемах с суставами по рекомендации врача.'
+    },
+    {
+      question: 'Подойдёт ли при артрозе?',
+      answer: 'Да, наколенник специально разработан для людей с артрозом. Он снижает нагрузку на сустав и облегчает боль при движении.'
+    },
+    {
+      question: 'Как выбрать размер?',
+      answer: 'Измерьте обхват колена по центру коленной чашечки. S: 32-36 см, M: 36-40 см, L: 40-44 см, XL: 44-48 см.'
+    },
+    {
+      question: 'Можно ли стирать?',
+      answer: 'Да, наколенник можно стирать вручную в тёплой воде с мягким мылом. Не отжимать, сушить в расправленном виде.'
+    },
+    {
+      question: 'Есть ли противопоказания?',
+      answer: 'Не рекомендуется при острых воспалениях кожи, открытых ранах, тромбозе. При сахарном диабете проконсультируйтесь с врачом.'
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+    <div className="min-h-screen bg-white">
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
-                <Icon name="Activity" className="text-white" size={24} />
+              <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center">
+                <Icon name="Heart" className="text-white" size={26} />
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                SportGear
-              </h1>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">КоленоКомфорт</h1>
+                <p className="text-xs text-gray-500">Здоровье и движение</p>
+              </div>
             </div>
             
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="lg" className="relative">
-                  <Icon name="ShoppingCart" size={20} />
-                  {cartItemsCount > 0 && (
-                    <Badge className="absolute -top-2 -right-2 bg-secondary text-white">
-                      {cartItemsCount}
-                    </Badge>
-                  )}
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-lg">
-                <SheetHeader>
-                  <SheetTitle className="text-2xl font-bold">Корзина</SheetTitle>
-                  <SheetDescription>
-                    {cartItemsCount > 0 ? `Товаров в корзине: ${cartItemsCount}` : 'Ваша корзина пуста'}
-                  </SheetDescription>
-                </SheetHeader>
-                
-                <div className="mt-8 space-y-4">
-                  {cart.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                      <Icon name="ShoppingBag" size={64} className="text-gray-300 mb-4" />
-                      <p className="text-gray-500 text-lg">Добавьте товары в корзину</p>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-                        {cart.map((item) => (
-                          <Card key={`${item.id}-${item.size}`} className="p-4">
-                            <div className="flex gap-4">
-                              <img 
-                                src={item.image} 
-                                alt={item.name}
-                                className="w-20 h-20 object-cover rounded-lg"
-                              />
-                              <div className="flex-1">
-                                <h4 className="font-semibold">{item.name}</h4>
-                                <p className="text-sm text-muted-foreground">Размер: {item.size}</p>
-                                <p className="text-primary font-bold mt-1">{item.price} ₽</p>
-                                
-                                <div className="flex items-center gap-2 mt-2">
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
-                                  >
-                                    <Icon name="Minus" size={14} />
-                                  </Button>
-                                  <span className="w-8 text-center font-semibold">{item.quantity}</span>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
-                                  >
-                                    <Icon name="Plus" size={14} />
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="ml-auto text-destructive"
-                                    onClick={() => removeFromCart(item.id, item.size)}
-                                  >
-                                    <Icon name="Trash2" size={16} />
-                                  </Button>
-                                </div>
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div className="space-y-4">
-                        <div className="flex justify-between text-lg font-bold">
-                          <span>Итого:</span>
-                          <span className="text-primary">{cartTotal.toLocaleString()} ₽</span>
-                        </div>
-                        
-                        <Button className="w-full" size="lg">
-                          <Icon name="CreditCard" size={20} className="mr-2" />
-                          Оформить заказ
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </SheetContent>
-            </Sheet>
+            <Button size="lg" onClick={() => setShowOrderForm(true)}>
+              <Icon name="Phone" size={18} className="mr-2" />
+              Заказать
+            </Button>
           </div>
         </div>
       </header>
 
-      <section className="py-16 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10">
+      <section className="py-12 md:py-20 bg-gradient-to-br from-blue-50 via-white to-orange-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Профессиональная спортивная экипировка
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Бандажи, наколенники и спортивные аксессуары для надёжной защиты и максимальной производительности
-            </p>
-            <div className="flex flex-wrap justify-center gap-6 text-left">
-              <div className="flex items-start gap-3">
-                <Icon name="Shield" className="text-primary mt-1" size={24} />
-                <div>
-                  <p className="font-semibold">Надёжная защита</p>
-                  <p className="text-sm text-gray-600">Сертифицированное качество</p>
+          <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+            <div className="space-y-6 animate-fade-in">
+              <Badge className="text-base px-4 py-2">Для пожилых людей</Badge>
+              <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+                Наколенник для <span className="text-primary">активной жизни</span> без боли
+              </h2>
+              <p className="text-xl text-gray-600 leading-relaxed">
+                Медицинский наколенник с технологией точечной компрессии. Разработан специально для пожилых людей 
+                с заболеваниями суставов. Облегчает боль, улучшает подвижность, возвращает радость движения.
+              </p>
+              
+              <div className="flex flex-wrap gap-4 items-center">
+                <div className="flex items-center gap-2">
+                  <Icon name="CheckCircle2" className="text-green-600" size={24} />
+                  <span className="font-semibold">Сертифицирован</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Icon name="Award" className="text-primary" size={24} />
+                  <span className="font-semibold">Рекомендован врачами</span>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
-                <Icon name="Truck" className="text-primary mt-1" size={24} />
-                <div>
-                  <p className="font-semibold">Быстрая доставка</p>
-                  <p className="text-sm text-gray-600">По всей России</p>
+
+              <div className="pt-4">
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-5xl font-bold text-primary">2 490 ₽</span>
+                  <span className="text-2xl text-gray-400 line-through">3 990 ₽</span>
+                  <Badge variant="secondary" className="text-lg px-3 py-1">-38%</Badge>
                 </div>
+                <Button size="lg" className="w-full md:w-auto text-lg px-8 py-6" onClick={() => setShowOrderForm(true)}>
+                  <Icon name="ShoppingCart" size={20} className="mr-2" />
+                  Заказать сейчас
+                </Button>
+                <p className="text-sm text-gray-500 mt-3">Бесплатная доставка по России • Гарантия 1 год</p>
               </div>
-              <div className="flex items-start gap-3">
-                <Icon name="Award" className="text-primary mt-1" size={24} />
-                <div>
-                  <p className="font-semibold">Гарантия 1 год</p>
-                  <p className="text-sm text-gray-600">Возврат 30 дней</p>
-                </div>
-              </div>
+            </div>
+
+            <div className="relative animate-scale-in">
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl"></div>
+              <img 
+                src="https://cdn.poehali.dev/projects/47749b69-c90d-4d20-b017-39c98a492235/files/711cebe9-28c4-43b7-9cb2-fddd490d543a.jpg"
+                alt="Наколенник для пожилых"
+                className="relative w-full rounded-3xl shadow-2xl"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">Наш каталог</h3>
+          <h3 className="text-3xl md:text-4xl font-bold text-center mb-12">Почему выбирают КоленоКомфорт</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {products.map((product, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {benefits.map((benefit, index) => (
               <Card 
-                key={product.id} 
-                className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group animate-fade-in hover-scale"
+                key={index}
+                className="p-6 text-center hover:shadow-lg transition-all duration-300 animate-fade-in hover-scale"
                 style={{ animationDelay: `${index * 100}ms` }}
-                onClick={() => setSelectedProduct(product)}
               >
-                <div className="aspect-square overflow-hidden bg-gray-100">
-                  <img 
-                    src={product.image} 
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Icon name={benefit.icon as any} className="text-primary" size={32} />
                 </div>
-                <div className="p-6">
-                  <Badge variant="secondary" className="mb-3">{product.category}</Badge>
-                  <h4 className="text-xl font-bold mb-2">{product.name}</h4>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex items-center">
-                      <Icon name="Star" className="text-yellow-500 fill-yellow-500" size={16} />
-                      <span className="ml-1 text-sm font-semibold">{product.rating}</span>
-                    </div>
-                    <span className="text-sm text-gray-500">Рейтинг</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-primary">{product.price} ₽</span>
-                    <Button size="sm">
-                      Подробнее
-                      <Icon name="ArrowRight" size={16} className="ml-2" />
-                    </Button>
-                  </div>
-                </div>
+                <h4 className="text-lg font-bold mb-2">{benefit.title}</h4>
+                <p className="text-gray-600 text-sm leading-relaxed">{benefit.description}</p>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {selectedProduct && (
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <img 
+                  src="https://cdn.poehali.dev/projects/47749b69-c90d-4d20-b017-39c98a492235/files/42d2cb92-2430-43cf-b895-6b8ceb03cece.jpg"
+                  alt="Активная жизнь"
+                  className="rounded-2xl shadow-xl w-full"
+                />
+              </div>
+              <div className="order-1 md:order-2 space-y-6">
+                <h3 className="text-3xl md:text-4xl font-bold">Верните радость движения</h3>
+                <div className="space-y-4">
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Icon name="Check" className="text-primary" size={18} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-1">Гуляйте без дискомфорта</h4>
+                      <p className="text-gray-600">Стабилизация сустава позволяет ходить дольше и увереннее</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Icon name="Check" className="text-primary" size={18} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-1">Играйте с внуками</h4>
+                      <p className="text-gray-600">Наколенник защищает сустав при активности и физических нагрузках</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Icon name="Check" className="text-primary" size={18} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg mb-1">Занимайтесь домашними делами</h4>
+                      <p className="text-gray-600">Надёжная поддержка при приседаниях, подъёме по лестнице</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h3 className="text-3xl md:text-4xl font-bold text-center mb-12">Характеристики</h3>
+            
+            <Card className="p-8">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between pb-3 border-b">
+                    <span className="text-gray-600 font-medium">Материал</span>
+                    <span className="font-semibold">Неопрен + эластан</span>
+                  </div>
+                  <div className="flex justify-between pb-3 border-b">
+                    <span className="text-gray-600 font-medium">Степень фиксации</span>
+                    <span className="font-semibold">Средняя</span>
+                  </div>
+                  <div className="flex justify-between pb-3 border-b">
+                    <span className="text-gray-600 font-medium">Тип застёжки</span>
+                    <span className="font-semibold">Липучка</span>
+                  </div>
+                  <div className="flex justify-between pb-3 border-b">
+                    <span className="text-gray-600 font-medium">Воздухопроницаемость</span>
+                    <span className="font-semibold">Высокая</span>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex justify-between pb-3 border-b">
+                    <span className="text-gray-600 font-medium">Цвет</span>
+                    <span className="font-semibold">Бежевый</span>
+                  </div>
+                  <div className="flex justify-between pb-3 border-b">
+                    <span className="text-gray-600 font-medium">Гарантия</span>
+                    <span className="font-semibold">1 год</span>
+                  </div>
+                  <div className="flex justify-between pb-3 border-b">
+                    <span className="text-gray-600 font-medium">Сертификация</span>
+                    <span className="font-semibold">Медицинское изделие</span>
+                  </div>
+                  <div className="flex justify-between pb-3 border-b">
+                    <span className="text-gray-600 font-medium">Производство</span>
+                    <span className="font-semibold">Россия</span>
+                  </div>
+                </div>
+              </div>
+
+              <Separator className="my-6" />
+
+              <div>
+                <h4 className="font-bold text-lg mb-4">Выберите размер</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    { size: 'S', label: 'S (32-36 см)' },
+                    { size: 'M', label: 'M (36-40 см)' },
+                    { size: 'L', label: 'L (40-44 см)' },
+                    { size: 'XL', label: 'XL (44-48 см)' }
+                  ].map((item) => (
+                    <Button
+                      key={item.size}
+                      variant={selectedSize === item.size ? 'default' : 'outline'}
+                      onClick={() => setSelectedSize(item.size)}
+                      className="h-auto py-3 flex flex-col"
+                    >
+                      <span className="font-bold text-lg">{item.size}</span>
+                      <span className="text-xs">{item.label.split(' ')[1]}</span>
+                    </Button>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500 mt-3">
+                  Измерьте обхват колена по центру коленной чашечки
+                </p>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div className="container mx-auto px-4">
+          <h3 className="text-3xl md:text-4xl font-bold text-center mb-12">Отзывы покупателей</h3>
+          
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="p-6 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                <div className="flex gap-1 mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Icon key={i} name="Star" className="text-yellow-500 fill-yellow-500" size={20} />
+                  ))}
+                </div>
+                <p className="text-gray-700 leading-relaxed mb-4 italic">"{testimonial.text}"</p>
+                <p className="font-semibold text-primary">{testimonial.name}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <h3 className="text-3xl md:text-4xl font-bold text-center mb-12">Частые вопросы</h3>
+            
+            <Accordion type="single" collapsible className="space-y-4">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`} className="border rounded-lg px-6">
+                  <AccordionTrigger className="text-left text-lg font-semibold hover:no-underline">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-600 leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto space-y-6">
+            <h3 className="text-3xl md:text-4xl font-bold">Закажите прямо сейчас</h3>
+            <p className="text-xl opacity-95">
+              Специальная цена 2 490 ₽ действует только сегодня. Бесплатная доставка по всей России.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              <Button size="lg" variant="secondary" className="text-lg px-8 py-6" onClick={() => setShowOrderForm(true)}>
+                <Icon name="Phone" size={20} className="mr-2" />
+                Оформить заказ
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {showOrderForm && (
         <div 
-          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in"
-          onClick={() => setSelectedProduct(null)}
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setShowOrderForm(false)}
         >
           <Card 
-            className="max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in"
+            className="max-w-lg w-full p-8 animate-scale-in"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="grid md:grid-cols-2 gap-8 p-8">
+            <div className="flex justify-between items-start mb-6">
               <div>
-                <div className="aspect-square bg-gray-100 rounded-2xl overflow-hidden mb-4">
-                  <img 
-                    src={selectedProduct.image} 
-                    alt={selectedProduct.name}
-                    className="w-full h-full object-cover"
-                  />
+                <h3 className="text-2xl font-bold mb-2">Оформление заказа</h3>
+                <p className="text-gray-600">Размер: {selectedSize} • Цена: 2 490 ₽</p>
+              </div>
+              <Button variant="ghost" size="sm" onClick={() => setShowOrderForm(false)}>
+                <Icon name="X" size={20} />
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name">Ваше имя</Label>
+                <Input
+                  id="name"
+                  placeholder="Иван Иванович"
+                  value={orderForm.name}
+                  onChange={(e) => setOrderForm({ ...orderForm, name: e.target.value })}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="phone">Телефон</Label>
+                <Input
+                  id="phone"
+                  placeholder="+7 (___) ___-__-__"
+                  value={orderForm.phone}
+                  onChange={(e) => setOrderForm({ ...orderForm, phone: e.target.value })}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="address">Адрес доставки</Label>
+                <Input
+                  id="address"
+                  placeholder="Город, улица, дом, квартира"
+                  value={orderForm.address}
+                  onChange={(e) => setOrderForm({ ...orderForm, address: e.target.value })}
+                  className="mt-2"
+                />
+              </div>
+
+              <Separator className="my-4" />
+
+              <div className="bg-primary/5 p-4 rounded-lg">
+                <div className="flex justify-between text-sm mb-2">
+                  <span>Наколенник (размер {selectedSize})</span>
+                  <span className="font-semibold">2 490 ₽</span>
+                </div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span>Доставка</span>
+                  <span className="font-semibold text-green-600">Бесплатно</span>
+                </div>
+                <Separator className="my-2" />
+                <div className="flex justify-between text-lg font-bold">
+                  <span>Итого:</span>
+                  <span className="text-primary">2 490 ₽</span>
                 </div>
               </div>
-              
-              <div className="space-y-6">
-                <div>
-                  <Badge variant="secondary" className="mb-3">{selectedProduct.category}</Badge>
-                  <h2 className="text-3xl font-bold mb-3">{selectedProduct.name}</h2>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="flex items-center">
-                      <Icon name="Star" className="text-yellow-500 fill-yellow-500" size={20} />
-                      <span className="ml-1 font-semibold">{selectedProduct.rating}</span>
-                    </div>
-                    <span className="text-gray-500">•</span>
-                    <span className="text-gray-600">152 отзыва</span>
-                  </div>
-                  <p className="text-3xl font-bold text-primary mb-6">{selectedProduct.price} ₽</p>
-                </div>
 
-                <Separator />
+              <Button className="w-full" size="lg" onClick={handleOrder}>
+                <Icon name="CheckCircle2" size={20} className="mr-2" />
+                Подтвердить заказ
+              </Button>
 
-                <div>
-                  <h3 className="font-bold text-lg mb-3">Описание</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Профессиональный наколенник разработан специально для спортсменов и активных людей. 
-                    Обеспечивает надёжную поддержку коленного сустава при физических нагрузках.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg mb-3">Характеристики</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Материал:</span>
-                      <span className="font-semibold">Неопрен + эластан</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Степень фиксации:</span>
-                      <span className="font-semibold">Средняя</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Тип застёжки:</span>
-                      <span className="font-semibold">Липучка</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Страна производства:</span>
-                      <span className="font-semibold">Россия</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg mb-3">Выберите размер</h3>
-                  <div className="flex gap-3">
-                    {['S', 'M', 'L', 'XL'].map((size) => (
-                      <Button
-                        key={size}
-                        variant={selectedSize === size ? 'default' : 'outline'}
-                        onClick={() => setSelectedSize(size)}
-                        className="flex-1"
-                      >
-                        {size}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <Button 
-                    className="flex-1" 
-                    size="lg"
-                    onClick={() => {
-                      addToCart(selectedProduct, selectedSize);
-                      setSelectedProduct(null);
-                    }}
-                  >
-                    <Icon name="ShoppingCart" size={20} className="mr-2" />
-                    Добавить в корзину
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="lg"
-                    onClick={() => setSelectedProduct(null)}
-                  >
-                    <Icon name="X" size={20} />
-                  </Button>
-                </div>
-              </div>
+              <p className="text-xs text-center text-gray-500">
+                Нажимая кнопку, вы соглашаетесь с условиями обработки персональных данных
+              </p>
             </div>
           </Card>
         </div>
       )}
 
-      <footer className="bg-gray-900 text-white py-12 mt-16">
+      <footer className="bg-gray-900 text-white py-12">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 text-center md:text-left">
+          <div className="grid md:grid-cols-3 gap-8 text-center md:text-left max-w-4xl mx-auto">
             <div>
-              <h4 className="font-bold text-lg mb-4">SportGear</h4>
-              <p className="text-gray-400">Профессиональная спортивная экипировка для достижения ваших целей</p>
+              <h4 className="font-bold text-lg mb-4">КоленоКомфорт</h4>
+              <p className="text-gray-400 text-sm">Медицинские наколенники для активной жизни без боли</p>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-4">Контакты</h4>
-              <div className="space-y-2 text-gray-400">
-                <p>Email: info@sportgear.ru</p>
-                <p>Телефон: +7 (800) 123-45-67</p>
+              <div className="space-y-2 text-gray-400 text-sm">
+                <p>Email: info@kolenokomfort.ru</p>
+                <p>Телефон: +7 (800) 555-35-35</p>
+                <p>Бесплатный звонок по России</p>
               </div>
             </div>
             <div>
-              <h4 className="font-bold text-lg mb-4">Соцсети</h4>
-              <div className="flex gap-4 justify-center md:justify-start">
-                <Icon name="Instagram" className="hover:text-secondary transition-colors cursor-pointer" size={24} />
-                <Icon name="Facebook" className="hover:text-secondary transition-colors cursor-pointer" size={24} />
-                <Icon name="Youtube" className="hover:text-secondary transition-colors cursor-pointer" size={24} />
+              <h4 className="font-bold text-lg mb-4">Гарантии</h4>
+              <div className="space-y-2 text-gray-400 text-sm">
+                <p>✓ Сертифицированное медизделие</p>
+                <p>✓ Гарантия 1 год</p>
+                <p>✓ Возврат 30 дней</p>
               </div>
             </div>
           </div>
           <Separator className="my-8 bg-gray-700" />
-          <p className="text-center text-gray-400">© 2024 SportGear. Все права защищены.</p>
+          <p className="text-center text-gray-400 text-sm">© 2024 КоленоКомфорт. Все права защищены.</p>
         </div>
       </footer>
     </div>
